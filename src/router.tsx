@@ -1,7 +1,7 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import AppLayout from '@/layout/AppLayout'
 import DasboardView from '@/views/DasboardView'
-import CreateProyectsViews from './views/projects/CreateProyectsViews'
+import CreateProyectsViews from './views/projects/CreateProjectsViews'
 
 
 
