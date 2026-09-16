@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import ProjectForm from './ProjectForm'
 import type { Project, ProjectFormData } from '@/types'
 import { useForm } from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { UpdateProject } from '@/api/ProjectApi'
 import { toast } from 'react-toastify'
 
@@ -23,12 +23,16 @@ export default function EditProjectForm({data, projectId}: EditProjectFormProps)
         description: data.description
     }})
 
+    const queryClient = useQueryClient()
+
     const {mutate} = useMutation({
         mutationFn: UpdateProject,
         onError: (error) => {
             toast.error(error.message)
         },
         onSuccess: (data) => {
+            queryClient.invalidateQueries({queryKey: ['projects']})
+            queryClient.invalidateQueries({queryKey: ['editProject', projectId]})
             toast.success(data)
             navigate('/')
         }
