@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import  {useForm} from 'react-hook-form'
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TaskForm from './TaskForm';
 import type { TaskFormData } from '@/types';
 import { createTask } from '@/api/TaskApi';
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 export default function AddTaskModal() {
 
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
     //leer si no existe
     const location = useLocation()
@@ -42,6 +43,7 @@ export default function AddTaskModal() {
         },
         onSuccess: (data) => {
             toast.success(data)
+            queryClient.invalidateQueries({queryKey: ['editProject', projectId]})
             reset()
             navigate(location.pathname, {replace: true})
 
