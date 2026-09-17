@@ -11,8 +11,7 @@ export async function createProject(formData: ProjectFormData) {
     } catch (error) {
         if(isAxiosError(error) && error.response){
 
-            // eslint-disable-next-line preserve-caught-error
-            throw new Error(error.response.data.error);
+            throw new Error(error.response.data.error, { cause: error });
             
         }
     }
@@ -31,8 +30,7 @@ export async function getProjects() {
     } catch (error) {
         if(isAxiosError(error) && error.response){
 
-            // eslint-disable-next-line preserve-caught-error
-            throw new Error(error.response.data.error);
+            throw new Error(error.response.data.error, { cause: error });
             
         }
     }
@@ -48,8 +46,7 @@ export async function getProjectById(id: Project['_id']) {
     } catch (error) {
         if(isAxiosError(error) && error.response){
 
-            // eslint-disable-next-line preserve-caught-error
-            throw new Error(error.response.data.error);
+            throw new Error(error.response.data.error, { cause: error });
             
         }
     }
@@ -69,9 +66,24 @@ export async function UpdateProject({formData, projectId}: ProjectApiType) {
         
     } catch (error) {
         if(isAxiosError(error) && error.response){
+            
+            throw new Error(error.response.data.error, { cause: error });
+            
+        }
+    }
+}
 
-            // eslint-disable-next-line preserve-caught-error
-            throw new Error(error.response.data.error);
+export async function DeleteProject(id: Project['_id']) {
+
+    try {
+
+        const {data} = await api.delete<string>(`/projects/${id}`)
+        return data
+        
+    } catch (error) {
+        if(isAxiosError(error) && error.response){
+
+            throw new Error(error.response.data.error, { cause: error });
             
         }
     }
