@@ -20,6 +20,7 @@ export const ProjectSchema = z.object({
     projectName: z.string(),
     clientName: z.string(),
     description: z.string(),
+    tasks: z.array(TaskSchema),
 
 })
 
@@ -28,7 +29,7 @@ export const dashboardProjectSchema = z.array(
         _id: true,
         projectName: true,
         clientName: true,
-        description: true
+        description: true,
     })
 )
 export type Project = z.infer<typeof ProjectSchema>
