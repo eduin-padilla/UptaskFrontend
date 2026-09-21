@@ -3,6 +3,8 @@ import {z} from 'zod'
 /** Tareas */
 
 export const taskStatusSchema = z.enum(["pending", "onHold", "inProgress", "underReview", "completed"])
+
+export type TaskStatus = z.infer<typeof taskStatusSchema>
 export const TaskSchema = z.object({
     _id: z.string(),
     name: z.string(),
