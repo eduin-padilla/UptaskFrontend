@@ -1,7 +1,28 @@
 import {z} from 'zod'
 
-/** Tareas */
+/** Auth y Users */
 
+
+export const AuthSchema = z.object({
+    name: z.string(),
+    email: z.string().email(),
+    password: z.string(),
+    password_confirmation: z.string(),
+    token: z.string()
+
+}) 
+
+
+
+type Auth = z.infer<typeof AuthSchema>
+
+export type UserLoginForm= Pick<Auth, 'email' | 'password'>
+export type UserRegistrationForm= Pick<Auth, 'name'| 'email' | 'password' | 'password_confirmation'>
+
+export type ConfirmToken = Pick<Auth, 'token'>
+
+
+/** Tasks */
 export const taskStatusSchema = z.enum(["pending", "onHold", "inProgress", "underReview", "completed"])
 
 export type TaskStatus = z.infer<typeof taskStatusSchema>
@@ -19,6 +40,7 @@ export const TaskSchema = z.object({
 export type Task = z.infer<typeof TaskSchema>
 export type TaskFormData = Pick<Task, 'name' | 'description' >
 /** Projects */
+
 export const ProjectSchema = z.object({
     _id: z.string(),
     projectName: z.string(),
