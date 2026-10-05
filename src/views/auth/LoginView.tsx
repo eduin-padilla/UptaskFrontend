@@ -12,15 +12,16 @@ export default function LoginView() {
     email: '',
     password: '',
   }
-  const { register, handleSubmit, formState: { errors } } = useForm({  defaultValues: initialValues })
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({  defaultValues: initialValues })
 
   const { mutate } = useMutation({
         mutationFn: authenticateUser,
         onError: (error) => {
           toast.error(error.message)
         },
-        onSuccess: (data) => {
-            toast.success(data)
+        onSuccess: () => {
+            toast.success('Iniciando sesion')
+            reset()
         }
   })
 
