@@ -1,7 +1,7 @@
 import {z} from 'zod'
 
 /** Auth y Users */
-export const AuthSchema = z.object({
+export const authSchema = z.object({
     name: z.string(),
     email: z.string().email(),
     password: z.string(),
@@ -10,7 +10,7 @@ export const AuthSchema = z.object({
 
 }) 
 
-type Auth = z.infer<typeof AuthSchema>
+type Auth = z.infer<typeof authSchema>
 
 export type UserLoginForm= Pick<Auth, 'email' | 'password'>
 export type UserRegistrationForm= Pick<Auth, 'name'| 'email' | 'password' | 'password_confirmation'>
@@ -18,6 +18,18 @@ export type RequestConfirmationCodeForm= Pick<Auth, 'email' >
 export type ConfirmToken = Pick<Auth, 'token'>
 export type ForgotPasswordForm = Pick<Auth, 'email'>
 export type NewPasswordForm = Pick<Auth, 'password' | 'password_confirmation'>
+
+
+// user 
+
+export const userSchema = authSchema.pick({
+    name: true,
+    email: true,
+}).extend({
+    _id: z.string()
+})
+
+export type User = z.infer<typeof userSchema>
 
 
 /** Tasks */
