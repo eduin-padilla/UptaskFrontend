@@ -7,7 +7,7 @@ export async function findUserByEmail({projectId, formData}: {projectId: Project
     try {
 
         const url = `/projects/${projectId}/team/find`
-        const data = await api.post(url, formData)
+        const data = await api.post<string>(url, formData)
 
         return data
         
@@ -28,7 +28,7 @@ export async function addUserToProject({projectId, id}: {projectId: Project['_id
     try {
 
         const url = `/projects/${projectId}/team`
-        const { data } = await api.post(url, {id})
+        const { data } = await api.post<string>(url, {id})
 
         return data
         
@@ -54,6 +54,24 @@ export async function getProjectTeam(projectId: Project['_id']) {
             return response.data
         }
 
+        
+    } catch (error) {
+
+        if (isAxiosError(error)) {
+            throw new Error(error.response?.data.error, { cause: error })
+        }
+    }
+    
+}
+
+export async function removeUserFromProject({projectId, userId}: {projectId: Project['_id'], userId: TeamMember['_id']}) {
+
+    try {
+
+        const url = `/projects/${projectId}/team/${userId}`
+        const { data } = await api.delete<string>(url)
+
+        return data
         
     } catch (error) {
 
