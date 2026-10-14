@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import { DeleteProject, getProjects } from "@/api/ProjectApi";
 import { toast } from 'react-toastify';
+import { useAuth } from '@/hooks/useAuth';
+import { isManager } from '@/utilities/polices';
 
  
 
 export default function DasboardView() {
+
+    const {data: user, isLoading: authLoading} = useAuth()
 
   const {data, isLoading} = useQuery({
     queryKey: ['projects'],
@@ -29,7 +33,8 @@ export default function DasboardView() {
     }
   })
 
-  if(isLoading) return 'cargando.....'
+  if(isLoading && authLoading) return 'cargando.....'
+
 
   if( data) return (
     <>
@@ -48,6 +53,10 @@ export default function DasboardView() {
                 <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10 bg-white shadow-lg border border-gray-100 rounded-lg">
                     <div className="flex min-w-0 gap-x-4">
                         <div className="min-w-0 flex-auto space-y-2">
+                            <div className='mb-5'>
+                                {user?._id && isManager(project.manager, user._id) ? <p className='text-xs font-bold uppercase bg-indigo-50 text-indigo-500 border-2 border-indigo-500 rounded-lg inline-block py-1 px-5'>Manager</p> : <p className='text-xs font-bold uppercase bg-green-50 text-green-500 border-2 border-green-500 rounded-lg inline-block py-1 px-5'>Miembro del equipo</p>}
+                            </div>
+                            
                             <Link to={`/projects/${project._id}`}
                                 className="text-gray-600 cursor-pointer hover:underline text-3xl font-bold"
                             >{project.projectName}</Link>
@@ -78,22 +87,27 @@ export default function DasboardView() {
                                             Ver Proyecto
                                             </Link>
                                         </Menu.Item>
-                                        <Menu.Item>
-                                            <Link 
-                                            to={`/projects/${project._id}/edit`}
-                                                className='block px-3 py-1 text-sm leading-6 text-gray-900'>
-                                            Editar Proyecto
-                                            </Link>
-                                        </Menu.Item>
-                                        <Menu.Item>
-                                            <button 
-                                                type='button' 
-                                                className='block px-3 py-1 text-sm leading-6 text-red-500'
-                                                onClick={() => mutate(project._id) }
-                                            >
-                                                Eliminar Proyecto
-                                            </button>
-                                        </Menu.Item>
+                                        {project.manager === user?._id && (
+                                            <>
+                                                <Menu.Item>
+                                                    <Link 
+                                                    to={`/projects/${project._id}/edit`}
+                                                        className='block px-3 py-1 text-sm leading-6 text-gray-900'>
+                                                    Editar Proyecto
+                                                    </Link>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    <button 
+                                                        type='button' 
+                                                        className='block px-3 py-1 text-sm leading-6 text-red-500'
+                                                        onClick={() => mutate(project._id) }
+                                                    >
+                                                        Eliminar Proyecto
+                                                    </button>
+                                                </Menu.Item>
+                                            </>
+                                        )}
+                                        
                                 </Menu.Items>
                             </Transition>
                         </Menu>

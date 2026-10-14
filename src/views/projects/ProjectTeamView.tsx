@@ -55,9 +55,9 @@ export default function ProjectTeamView() {
           </nav>
           <h2 className="text-5xl font-black my-10">Miembros actuales</h2>
           {data.length ? (
-              <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
+              <ul role="list" className="mt-10 space-y-4">
                   {data?.map((member) => (
-                      <li key={member._id} className="flex justify-between gap-x-6 px-5 py-10">
+                      <li key={member._id} className="flex justify-between gap-x-6 px-5 py-10 bg-white shadow-lg border border-gray-100 rounded-lg">
                           <div className="flex min-w-0 gap-x-4">
                               <div className="min-w-0 flex-auto space-y-2">
                                   <p className="text-2xl font-black text-gray-600">
