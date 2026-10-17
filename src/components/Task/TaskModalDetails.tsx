@@ -91,15 +91,31 @@ export default function TaskModalDetails() {
                                     <p className='text-sm text-slate-400'>Última actualización: {formatDate(data.updatedAt)}</p>
                                     <Dialog.Title
                                         as="h3"
-                                        className="font-black text-4xl text-slate-600 my-5"
+                                        className="font-black text-4xl text-slate-600 my-5" 
                                     >{data.name}
                                     </Dialog.Title>
+
                                     <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
+
+                                    <p className=' text-2xl text-slate-500 mb-2'>Historial de cambios</p>
+                                    <ul className='list-decimal'>
+                                        {data.completedBy.map((activityLog) => (
+                                            <li key={activityLog._id}>
+                                                <span 
+                                                className='font-bold text-slate-600'
+                                                >
+                                                    {statusTrasnlaions[activityLog.status]}
+                                                </span>
+                                                {' '}{activityLog.user.name}
+                                            </li> 
+                                        ))}
+                                    </ul>
+
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
 
                                         <select 
-                                        className='w-full bg-white border border-gray-300'
+                                        className='w-full bg-white border border-gray-300 p-2'
                                         defaultValue={data.status}
                                         onChange={handleChange}
                                         >{Object.entries(statusTrasnlaions).map(([key, value]) => (
