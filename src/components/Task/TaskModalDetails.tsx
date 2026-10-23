@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { formatDate } from '@/utilities/utilities';
 import { statusTrasnlaions } from '@/locales/es';
 import type { TaskStatus } from '@/types';
+import NotesPanel from '../notes/NotesPanel';
 
 
 export default function TaskModalDetails() {
@@ -58,7 +59,7 @@ export default function TaskModalDetails() {
         toast.error(error.message, {toastId: 'error'})
         return <Navigate to={`/projects/${projectId}`} />
     }
-  
+   
     if (data) return (
         <>
             <Transition appear show={show} as={Fragment}>
@@ -97,19 +98,26 @@ export default function TaskModalDetails() {
 
                                     <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
 
-                                    <p className=' text-2xl text-slate-500 mb-2'>Historial de cambios</p>
-                                    <ul className='list-decimal'>
-                                        {data.completedBy.map((activityLog) => (
-                                            <li key={activityLog._id}>
-                                                <span 
-                                                className='font-bold text-slate-600'
-                                                >
-                                                    {statusTrasnlaions[activityLog.status]}
-                                                </span>
-                                                {' '}{activityLog.user.name}
-                                            </li> 
-                                        ))}
-                                    </ul>
+                                    {data.completedBy.length ? (
+
+                                        <>
+                                        <p className=' font-bold text-2xl text-slate-600 my-5'>Historial de cambios</p>
+                                        <ul className='list-decimal'>
+                                            {data.completedBy.map((activityLog) => (
+                                                <li key={activityLog._id}>
+                                                    <span 
+                                                    className='font-bold text-slate-600'
+                                                    >
+                                                        {statusTrasnlaions[activityLog.status]}
+                                                    </span>
+                                                    {' '}{activityLog.user.name}
+                                                </li> 
+                                            ))}
+                                        </ul>
+                                        </>
+                                    ): null}
+
+                                    
 
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
@@ -122,6 +130,9 @@ export default function TaskModalDetails() {
                                             <option key={key} value={key}>{value}</option>
                                         ))}</select>
                                     </div>
+                                    <NotesPanel
+                                        notes={data.notes}
+                                    />
                                 </Dialog.Panel>
                             </Transition.Child>
                         </div>
