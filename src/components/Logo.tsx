@@ -2,7 +2,7 @@
 export default function Logo() {
   return (
     <> 
-      <img src="/public/logo.svg" alt="Logo" />
+      <img src="/logo.svg" alt="Logo" />
     </>
   )
 }
